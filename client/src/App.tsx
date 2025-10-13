@@ -50,6 +50,8 @@ function Router() {
           <Route path="/forgot-password" component={ForgotPassword} />
           <Route path="/reset-password" component={ResetPassword} />
           <Route path="/" component={LoginPage} />
+          <Route path="/privacy-policy" component={PrivacyPolicyPage} />
+
         </>
       ) : (
         <>
@@ -72,7 +74,6 @@ function Router() {
           <Route path="/my-hunts" component={MyHuntsPage} />
           <Route path="/invite-hunt" component={InviteHuntPage} />
           <Route path="/join-hunt/:inviteCode?" component={JoinHuntPage} />
-          <Route path="/privacy-policy" component={PrivacyPolicyPage} />
           <Route path="/admin" component={AdminDashboard} />
           <Route path="/admin/hunts" component={AdminHunts} />
           <Route path="/admin/hunts/new" component={AdminHuntForm} />
