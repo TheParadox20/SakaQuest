@@ -61,6 +61,7 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   getAllUsers(): Promise<User[]>;
   createUser(user: { name: string; email: string; password: string }): Promise<User>;
+  deleteUserAccount(userId: string): Promise<void>;
   
   // Hunt operations
   getAllHunts(): Promise<Hunt[]>;
@@ -192,6 +193,47 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return user;
+  }
+
+  async deleteUserAccount(userId: string): Promise<void> {
+    // Delete user data in the correct order (respecting foreign key constraints)
+    // The database has cascade delete set up for some tables, but we'll explicitly delete for safety
+    
+    // 1. Delete clue attempts
+    await db.delete(clueAttempts).where(eq(clueAttempts.userId, userId));
+    
+    // 2. Delete hunt session progress where user solved clues
+    await db.delete(huntSessionProgress).where(eq(huntSessionProgress.solvedBy, userId));
+    
+    // 3. Delete hunt participants (user's participation in sessions)
+    await db.delete(huntParticipants).where(eq(huntParticipants.userId, userId));
+    
+    // 4. Delete hunt sessions hosted by user
+    await db.delete(huntSessions).where(eq(huntSessions.hostUserId, userId));
+    
+    // 5. Delete hunt invitations (both sent and received)
+    await db.delete(huntInvitations).where(eq(huntInvitations.invitedUserId, userId));
+    
+    // 6. Delete user-created hunts (this will cascade delete clues due to DB constraints)
+    await db.delete(userCreatedHunts).where(eq(userCreatedHunts.creatorId, userId));
+    
+    // 7. Delete password reset tokens
+    await db.delete(passwordResetTokens).where(eq(passwordResetTokens.userId, userId));
+    
+    // 8. Delete subscriptions
+    await db.delete(subscriptions).where(eq(subscriptions.userId, userId));
+    
+    // 9. Delete user badges
+    await db.delete(userBadges).where(eq(userBadges.userId, userId));
+    
+    // 10. Delete user progress
+    await db.delete(userProgress).where(eq(userProgress.userId, userId));
+    
+    // 11. Delete purchases
+    await db.delete(purchases).where(eq(purchases.userId, userId));
+    
+    // 12. Finally, delete the user account
+    await db.delete(users).where(eq(users.id, userId));
   }
 
   async getAllHunts(): Promise<Hunt[]> {

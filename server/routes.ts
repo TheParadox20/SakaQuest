@@ -202,6 +202,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Delete account endpoint
+  app.delete('/api/account/delete', authenticateToken, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.userId!;
+      
+      // Delete all user data in the correct order (respecting foreign key constraints)
+      await storage.deleteUserAccount(userId);
+      
+      res.json({ success: true, message: 'Account and all associated data have been permanently deleted' });
+    } catch (error) {
+      console.error('Delete account error:', error);
+      res.status(500).json({ message: 'Failed to delete account. Please try again or contact support.' });
+    }
+  });
+
   // Diagnostic endpoint for mobile troubleshooting
   app.get('/api/diagnostic', authenticateToken, async (req: AuthRequest, res) => {
     try {

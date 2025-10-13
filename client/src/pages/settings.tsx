@@ -348,13 +348,15 @@ export default function SettingsPage() {
               Logout
             </Button>
 
-            <Button 
-              variant="outline" 
-              className="w-full py-3 px-6 rounded-xl font-semibold border-red-500 text-red-600 hover:bg-red-50"
-            >
-              <i className="fas fa-trash mr-2"></i>
-              Delete Account
-            </Button>
+            <Link to="/delete-account" className="w-full">
+              <Button 
+                variant="outline" 
+                className="w-full py-3 px-6 rounded-xl font-semibold border-red-500 text-red-600 hover:bg-red-50"
+              >
+                <i className="fas fa-trash mr-2"></i>
+                Delete Account
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </div>

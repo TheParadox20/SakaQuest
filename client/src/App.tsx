@@ -21,6 +21,7 @@ import InviteHuntPage from "@/pages/invite-hunt";
 import JoinHuntPage from "@/pages/join-hunt";
 import PrivacyPolicyPage from "@/pages/privacy-policy";
 import HuntCompletion from "@/pages/hunt-completion";
+import DeleteAccountPage from "@/pages/delete-account";
 import AdminDashboard from "@/pages/admin-dashboard";
 import AdminHunts from "@/pages/admin-hunts";
 import AdminHuntForm from "@/pages/admin-hunt-form";
@@ -74,6 +75,7 @@ function Router() {
           <Route path="/my-hunts" component={MyHuntsPage} />
           <Route path="/invite-hunt" component={InviteHuntPage} />
           <Route path="/join-hunt/:inviteCode?" component={JoinHuntPage} />
+          <Route path="/delete-account" component={DeleteAccountPage} />
           <Route path="/admin" component={AdminDashboard} />
           <Route path="/admin/hunts" component={AdminHunts} />
           <Route path="/admin/hunts/new" component={AdminHuntForm} />
